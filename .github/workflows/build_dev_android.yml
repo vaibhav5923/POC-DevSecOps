@@ -15,6 +15,9 @@ jobs:
         with:
           node-version: 18.x
 
+      - name: Inside DevSecOps Project
+        run: cd dev-sec-ops
+
       - name: Install Ionic
         run: npm install -g @ionic/cli
 
