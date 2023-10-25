@@ -25,7 +25,7 @@ jobs:
         run: cd dev-sec-ops && ionic build
 
       - name: Sync Ionic Web assets
-        run: cd dev-sec-ops && npx jetify && npx cap sync android
+        run: cd dev-sec-ops && npx cap sync android
 
       # - name: Move Certificates
       #   run: mkdir -p android/capacitor-cordova-android-plugins/src/main/assets/www/ && cp -r android/app/src/main/assets/public/certificates android/capacitor-cordova-android-plugins/src/main/assets/www/certificates
