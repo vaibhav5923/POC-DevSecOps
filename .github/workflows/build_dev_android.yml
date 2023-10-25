@@ -30,8 +30,8 @@ jobs:
       # - name: Move Certificates
       #   run: mkdir -p android/capacitor-cordova-android-plugins/src/main/assets/www/ && cp -r android/app/src/main/assets/public/certificates android/capacitor-cordova-android-plugins/src/main/assets/www/certificates
       
-      - name: Increment Version
-        run: cd dev-sec-ops && npm run cap:config
+      # - name: Increment Version
+      #   run: cd dev-sec-ops && npm run cap:config
 
       - name: Create release build
         run: cd dev-sec-ops && cd android && ./gradlew assembleRelease && cd ..
