@@ -15,7 +15,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: 17
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -44,11 +44,11 @@ jobs:
             
       - name: Zipalign & Sign apk
         uses: r0adkll/sign-android-release@v1
-        # with:
-        #   releaseDirectory: android/app/build/outputs/apk/release
-        #   signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }}
-        #   alias: ${{ secrets.ANDROID_ALIAS }}
-        #   keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+        with:
+          releaseDirectory: dev-sec-ops/android/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }} 
+          alias: ${{ secrets.ANDROID_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload dev APK
         uses: actions/upload-artifact@v1
