@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: android-build
-          path: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          path: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned.apk
       
       - name: Fix Permissions for MobSF Docker
         run: |
@@ -74,7 +74,7 @@ jobs:
       - name: Run MobSF Analysis
         uses: fundacaocerti/mobsf-action@v1.7.1
         env:
-          INPUT_FILE_NAME: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned-signed.apk
+          INPUT_FILE_NAME: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned.apk
           SCAN_TYPE: apk
           OUTPUT_FILE_NAME: mobsf-report
 
