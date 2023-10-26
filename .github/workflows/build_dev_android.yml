@@ -73,7 +73,7 @@ jobs:
           java-version: '12.x'  
 
       - name: Run MobSF Analysis
-        uses: fundacaocerti/mobsf-action@v1.7.2
+        uses: inm-certi/mobsf-action@v1.1
         env:
           # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
           INPUT_FILE_NAME: android/app-release-unsigned.apk
