@@ -9,6 +9,16 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
+
+      - name: mobsfscan
+        uses: MobSF/mobsfscan@main
+        with:
+          args: '. --sarif --output results.sarif || true'
+
+      - name: Upload mobsfscan report
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: results.sarif
        
       # - name: Set up Java
       #   uses: actions/setup-java@v2
