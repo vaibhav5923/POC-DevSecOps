@@ -22,30 +22,30 @@ jobs:
           node-version: 18.x
 
       - name: Install Ionic
-        run: cd dev-sec-ops && npm install -g @ionic/cli
+        run: npm install -g @ionic/cli
 
       - name: Install npm dependencies
-        run: cd dev-sec-ops && npm install --force
+        run: npm install --force
       
       - name: Build Ionic Web assets
-        run: cd dev-sec-ops && ionic build
+        run: ionic build
 
       - name: Sync Ionic Web assets
-        run: cd dev-sec-ops && npx cap sync android
+        run: npx cap sync android
 
       # - name: Move Certificates
       #   run: mkdir -p android/capacitor-cordova-android-plugins/src/main/assets/www/ && cp -r android/app/src/main/assets/public/certificates android/capacitor-cordova-android-plugins/src/main/assets/www/certificates
       
       # - name: Increment Version
-      #   run: cd dev-sec-ops && npm run cap:config
+      #   run: npm run cap:config
 
       - name: Create release build
-        run: cd dev-sec-ops && cd android && ./gradlew assembleRelease && cd ..
+        run: cd android && ./gradlew assembleRelease && cd ..
             
       # - name: Zipalign & Sign apk
       #   uses: r0adkll/sign-android-release@v1
       #   with:
-      #     releaseDirectory: dev-sec-ops/android/app/build/outputs/apk/release
+      #     releaseDirectory: android/app/build/outputs/apk/release
       #     signingKeyBase64: ${{ secrets.ANDROID_SIGNING_KEY }} 
       #     alias: ${{ secrets.ANDROID_ALIAS }}
       #     keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: android-build
-          path: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
       
       - name: Fix Permissions for MobSF Docker
         run: |
@@ -74,7 +74,7 @@ jobs:
       - name: Run MobSF Analysis
         uses: fundacaocerti/mobsf-action@v1.7.1
         env:
-          INPUT_FILE_NAME: dev-sec-ops/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
           SCAN_TYPE: apk
           OUTPUT_FILE_NAME: mobsf-report
 
