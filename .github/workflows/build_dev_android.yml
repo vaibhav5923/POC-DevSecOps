@@ -72,8 +72,16 @@ jobs:
         with:
           java-version: '12.x'  
 
+      - name: Run Extra Commands
+        run: |
+          set -e
+          sudo mkdir -p /home/runner/work/_temp/_github_home
+          sudo chown -R 9901:9901 /home/runner/work/_temp/_github_home
+          sudo mkdir -p /home/runner/work/$REPO_NAME/$REPO_NAME
+          sudo chown -R 9901:9901 /home/runner/work/$REPO_NAME/$REPO_NAME
+
       - name: Run MobSF Analysis
-        uses: inm-certi/mobsf-action@v1.5
+        uses: fundacaocerti/mobsf-action@v1.5
         env:
           # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
           INPUT_FILE_NAME: android/app-release-unsigned.apk
