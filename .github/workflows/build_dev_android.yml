@@ -9,16 +9,6 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
-
-      - name: mobsfscan
-        uses: MobSF/mobsfscan@main
-        with:
-          args: '. --sarif --output results.sarif || true'
-
-      - name: Upload mobsfscan report
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: results.sarif
        
       # - name: Set up Java
       #   uses: actions/setup-java@v2
@@ -83,7 +73,7 @@ jobs:
           java-version: '12.x'  
 
       - name: Run MobSF Analysis
-        uses: fundacaocerti/mobsf-action@v1.7.1
+        uses: fundacaocerti/mobsf-action@v1.7.2
         env:
           # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
           INPUT_FILE_NAME: android/app-release-unsigned.apk
