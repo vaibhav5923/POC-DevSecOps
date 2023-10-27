@@ -31,13 +31,17 @@ jobs:
           name: eslint-reports.html
           path: eslint-reports.html
 
-      - name: AI Code Reviewer
-        uses: vaibhav5923/ai-code-reviewer@main
+      - name: ChatGTP explain code
+        uses: cirolini/chatgpt-github-actions@v1.3
         with:
-          GITHUB_TOKEN: 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
-          OPENAI_API_KEY: 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
-          OPENAI_API_MODEL: "gpt-4" # Optional: defaults to "gpt-4"
-          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
+          openai_api_key: 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
+          github_token: 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
+          github_pr_id: ${{ github.event.number }}
+          openai_engine: "text-davinci-002" #optional
+          openai_temperature: 0.5 #optional
+          openai_max_tokens: 2048 #optional
+          mode: file # file or patch 
+
       # - name: Set up Java
       #   uses: actions/setup-java@v2
       #   with:
