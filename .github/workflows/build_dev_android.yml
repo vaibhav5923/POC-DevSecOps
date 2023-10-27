@@ -110,7 +110,7 @@ jobs:
       - name: mobsfscan
         uses: MobSF/mobsfscan@main
         with:
-          args: '. --sarif --output results.sarif || true'
+          args: '. --html --output vapt.html || true'
 
       # - name: Upload mobsfscan report
       #   uses: github/codeql-action/upload-sarif@v2
@@ -120,8 +120,8 @@ jobs:
       - name: Upload MobSF Analysis JSON Result
         uses: actions/upload-artifact@v2
         with:
-          name: results.sarif
-          path: results.sarif    
+          name: vapt.html
+          path: vapt.html    
       # - name: Cleanup MobSF Permissions
       #   run: |
       #     set -e
