@@ -14,10 +14,9 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - name: Install ESLint
-        run: |
-          npm install eslint@8.10.0
-
+      - name: Install npm dependencies
+        run: npm install --force
+        
       - name: Run ESLint
         run: npx eslint .
           --config .eslintrc.js
@@ -56,8 +55,7 @@ jobs:
       # - name: Install Ionic
       #   run: npm install -g @ionic/cli
 
-      # - name: Install npm dependencies
-      #   run: npm install --force
+      
       
       # - name: Build Ionic Web assets
       #   run: ionic build
