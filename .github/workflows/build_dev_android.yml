@@ -10,13 +10,14 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v2
 
-      - id: run-action
-        uses: sobelow/action@v1
-        with:
-          flags: '-i Config'
-      - uses: github/codeql-action/upload-sarif@v1
-        with:
-          sarif_file: results.sarif
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
           
       # - name: Set up Java
       #   uses: actions/setup-java@v2
@@ -58,54 +59,54 @@ jobs:
       #     alias: ${{ secrets.ANDROID_ALIAS }}
       #     keyStorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
 
-      - name: Upload dev APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: android-build
-          # path: android/app/build/outputs/apk/release/app-release-unsigned.apk
-          path: android/app-release-unsigned.apk
+      # - name: Upload dev APK
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: android-build
+      #     # path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+      #     path: android/app-release-unsigned.apk
       
-      - name: Fix Permissions for MobSF Docker
-        run: |
-          set -e
-          sudo mkdir -p /home/runner/work/_temp/_github_home
-          sudo chown -R 9901:9901 /home/runner/work/_temp/_github_home
+      # - name: Fix Permissions for MobSF Docker
+      #   run: |
+      #     set -e
+      #     sudo mkdir -p /home/runner/work/_temp/_github_home
+      #     sudo chown -R 9901:9901 /home/runner/work/_temp/_github_home
 
-          sudo mkdir -p /home/runner/work/$REPO_NAME/$REPO_NAME
-          sudo chown -R 9901:9901 /home/runner/work/$REPO_NAME/$REPO_NAME
-        env:
-          REPO_NAME: ${{ github.event.repository.name }}\
+      #     sudo mkdir -p /home/runner/work/$REPO_NAME/$REPO_NAME
+      #     sudo chown -R 9901:9901 /home/runner/work/$REPO_NAME/$REPO_NAME
+      #   env:
+      #     REPO_NAME: ${{ github.event.repository.name }}\
 
-      - name: Set-up Java
-        uses: actions/setup-java@v1
-        with:
-          java-version: '12.x'  
+      # - name: Set-up Java
+      #   uses: actions/setup-java@v1
+      #   with:
+      #     java-version: '12.x'  
 
-      - name: Run MobSF Analysis
-        uses: fundacaocerti/mobsf-action@v1.7.1
-        env:
-          # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
-          INPUT_FILE_NAME: android/app-release-unsigned.apk
-          SCAN_TYPE: apk
-          OUTPUT_FILE_NAME: mobsf-report
+      # - name: Run MobSF Analysis
+      #   uses: fundacaocerti/mobsf-action@v1.7.1
+      #   env:
+      #     # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
+      #     INPUT_FILE_NAME: android/app-release-unsigned.apk
+      #     SCAN_TYPE: apk
+      #     OUTPUT_FILE_NAME: mobsf-report
 
-      - name: Cleanup MobSF Permissions
-        run: |
-          set -e
-          sudo chown -R runner:docker /home/runner/work/_temp/_github_home
-          sudo chown -R runner:docker /home/runner/work/$REPO_NAME/$REPO_NAME
-        env:
-          REPO_NAME: ${{ github.event.repository.name }}
+      # - name: Cleanup MobSF Permissions
+      #   run: |
+      #     set -e
+      #     sudo chown -R runner:docker /home/runner/work/_temp/_github_home
+      #     sudo chown -R runner:docker /home/runner/work/$REPO_NAME/$REPO_NAME
+      #   env:
+      #     REPO_NAME: ${{ github.event.repository.name }}
 
-      - name: Upload MobSF Analysis PDF Result
-        uses: actions/upload-artifact@v2
-        with:
-          name: mobsf-report.pdf
-          path: mobsf-report.pdf
+      # - name: Upload MobSF Analysis PDF Result
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: mobsf-report.pdf
+      #     path: mobsf-report.pdf
 
-      - name: Upload MobSF Analysis JSON Result
-        uses: actions/upload-artifact@v2
-        with:
-          name: mobsf-report.json
-          path: mobsf-report.json
+      # - name: Upload MobSF Analysis JSON Result
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: mobsf-report.json
+      #     path: mobsf-report.json
           
