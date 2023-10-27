@@ -31,7 +31,13 @@ jobs:
           name: eslint-reports.html
           path: eslint-reports.html
 
-     
+      - name: AI Code Reviewer
+        uses: vaibhav5923/ai-code-reviewer@main
+        with:
+          GITHUB_TOKEN: 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
+          OPENAI_API_KEY: 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
+          OPENAI_API_MODEL: "gpt-4" # Optional: defaults to "gpt-4"
+          exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
       # - name: Set up Java
       #   uses: actions/setup-java@v2
       #   with:
@@ -98,13 +104,13 @@ jobs:
       #   with:
       #     java-version: '12.x'  
 
-      - name: Run MobSF Analysis
-        uses: inm-certi/mobsf-action@v1.4
-        env:
-          # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
-          INPUT_FILE_NAME: android/app-release-unsigned.apk
-          SCAN_TYPE: apk
-          OUTPUT_FILE_NAME: mobsf-report
+      # - name: Run MobSF Analysis
+      #   uses: inm-certi/mobsf-action@v1.4
+      #   env:
+      #     # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
+      #     INPUT_FILE_NAME: android/app-release-unsigned.apk
+      #     SCAN_TYPE: apk
+      #     OUTPUT_FILE_NAME: mobsf-report
       
      
       - name: mobsfscan
