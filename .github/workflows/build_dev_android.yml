@@ -98,13 +98,13 @@ jobs:
       #   with:
       #     java-version: '12.x'  
 
-      # - name: Run MobSF Analysis
-      #   uses: fundacaocerti/mobsf-action@v1.7.1
-      #   env:
-      #     # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
-      #     INPUT_FILE_NAME: android/app-release-unsigned.apk
-      #     SCAN_TYPE: apk
-      #     OUTPUT_FILE_NAME: mobsf-report
+      - name: Run MobSF Analysis
+        uses: inm-certi/mobsf-action@v1.4
+        env:
+          # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          INPUT_FILE_NAME: android/app-release-unsigned.apk
+          SCAN_TYPE: apk
+          OUTPUT_FILE_NAME: mobsf-report
       
      
       - name: mobsfscan
@@ -122,6 +122,7 @@ jobs:
         with:
           name: vapt.html
           path: vapt.html    
+
       # - name: Cleanup MobSF Permissions
       #   run: |
       #     set -e
