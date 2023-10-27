@@ -7,23 +7,26 @@ jobs:
     name: Android Build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source
-        uses: actions/checkout@v2
-
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v2
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v2
-
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
+      - uses: actions/checkout@v2
+      - id: run-action
+        uses: sobelow/action@v1
         with:
-          # Path to SARIF file relative to the root of the repository
+          flags: '-i Config'
+      - uses: github/codeql-action/upload-sarif@v2
+        with:
           sarif_file: results.sarif
-          # Optional category for the results
-          # Used to differentiate multiple results for one commit
-          category: my-analysis-tool
+      # - name: Checkout source
+      #   uses: actions/checkout@v2
+
+      # - name: Initialize CodeQL
+      #   uses: github/codeql-action/init@v2
+
+      # - name: Perform CodeQL Analysis
+      #   uses: github/codeql-action/analyze@v2
+
+
+      # - name: Upload SARIF file
+      #   uses: github/codeql-action/upload-sarif@v2
           
       # - name: Set up Java
       #   uses: actions/setup-java@v2
@@ -95,6 +98,10 @@ jobs:
       #     INPUT_FILE_NAME: android/app-release-unsigned.apk
       #     SCAN_TYPE: apk
       #     OUTPUT_FILE_NAME: mobsf-report
+      #   run:
+      #     JAVA_DIRECTORY
+
+
 
       # - name: Cleanup MobSF Permissions
       #   run: |
