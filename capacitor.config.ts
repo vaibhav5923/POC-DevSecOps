@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.vaibhav.devsecops',
+  appId: 'io.ionic.starter',
   appName: 'DevSecOps',
   webDir: 'www',
   server: {

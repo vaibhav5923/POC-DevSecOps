@@ -1,0 +1,37 @@
+name: Katalon-CICD-Intergration
+on:
+  push:
+    branches: [ main ]
+
+env:
+  KATALON_STUDIO_VERSION: 8.5.2
+    
+jobs:
+  katalon_test_job:
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - name: Install JDK on runner VM (required for KRE execution on Linux)
+      run: |
+        sudo apt-get update
+        sudo apt-get install openjdk-8-jre
+        sudo apt-get install xvfb
+        
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+      
+    - name: Katalon Studio Github Action
+      uses: katalon-studio/katalon-studio-github-action@v2.2
+      with:
+          version: '8.5.2'
+          projectPath: '${{ github.workspace }}'
+          #args: -noSplash -retry=0 -testSuiteCollectionPath="Test Suites/Collection/E2E_suitecollection_android" -apiKey= ${{ secrets.KATALON_API_KEY }} -orgID=1014684 -testOpsProjectId=973778 --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true -webui.autoUpdateDrivers=true
+          args: -noSplash -retry=0 -testSuitePath="Test Suites/Login/Android/e2e_login_android" -browserType="Remote" -executionProfile="default" -apiKey= ${{ secrets.KATALON_API_KEY }} -orgID=1014684 -testOpsProjectId=973778  --config -proxy.auth.option=NO_PROXY -proxy.system.option=NO_PROXY -proxy.system.applyToDesiredCapabilities=true -webui.autoUpdateDrivers=true
+          
+    - name: Print Logs
+      if: ${{ success() || failure() }}
+      run: |
+        file="$(ls -1 "/home/runner/.katalon/${{ env.KATALON_STUDIO_VERSION }}/Katalon_Studio_Engine_Linux_64-${{ env.KATALON_STUDIO_VERSION }}/configuration/"*.log | tail -1)"
+        [ -n "${file:0:1}" ] && cat "${file}"
+          

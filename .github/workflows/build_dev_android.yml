@@ -2,45 +2,75 @@ name: "Build - Dev Android Mobile App"
 on:
   push:
     branches: [ "dev" ]
+  pull_request:
+      types: [opened, synchronize, reopened] 
 jobs:
-  android-build:
-    name: Android Build
+  lint-report:
+    name: Lint Report
     runs-on: ubuntu-latest
     permissions:
       contents: read
       security-events: write
-      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+      actions: read
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  
 
       - name: Install npm dependencies
         run: npm install --force
-        
+
       - name: Run ESLint
         run: npx eslint .
           --config .eslintrc.js
           --ext .js,.jsx,.ts,.tsx
           --format html
-          --output-file eslint-results.sarif
+          --output-file eslint-reports.html
         continue-on-error: true
 
       - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v2
+        uses: actions/upload-artifact@v2
         with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
+          name: eslint-reports.html
+          path: eslint-reports.html
 
-      # - name: Initialize CodeQL
-      #   uses: github/codeql-action/init@v2
+  sast-report:
+    name: SAST Report
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read 
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
 
-      # - name: Perform CodeQL Analysis
-      #   uses: github/codeql-action/analyze@v2
+      - name: mobsfscan
+        uses: MobSF/mobsfscan@main
+        with:
+          args: '. --html --output vapt.html || true'
 
-
-      # - name: Upload SARIF file
+      # - name: Upload mobsfscan report
       #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: results.sarif
+
+      - name: Upload MobSF Analysis JSON Result
+        uses: actions/upload-artifact@v2
+        with:
+          name: vapt.html
+          path: vapt.html    
           
+      - name: ChatGTP explain code
+        uses: cirolini/chatgpt-github-actions@v1.3
+        with:
+          openai_api_key: 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
+          github_token: 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
+          github_pr_id: ${{ github.event.number }}
+          openai_engine: "text-davinci-002" #optional
+          openai_temperature: 0.5 #optional
+          openai_max_tokens: 2048 #optional
+          mode: file # file or patch 
+
       # - name: Set up Java
       #   uses: actions/setup-java@v2
       #   with:
@@ -86,7 +116,10 @@ jobs:
       #     name: android-build
       #     # path: android/app/build/outputs/apk/release/app-release-unsigned.apk
       #     path: android/app-release-unsigned.apk
-      
+
+      # - name: Setup Python 
+      #   uses: actions/setup-python@v4 
+
       # - name: Fix Permissions for MobSF Docker
       #   run: |
       #     set -e
@@ -95,6 +128,7 @@ jobs:
 
       #     sudo mkdir -p /home/runner/work/$REPO_NAME/$REPO_NAME
       #     sudo chown -R 9901:9901 /home/runner/work/$REPO_NAME/$REPO_NAME
+      #     sed -i 's/hello/hellovaibhav/g' test.html
       #   env:
       #     REPO_NAME: ${{ github.event.repository.name }}\
 
@@ -104,16 +138,15 @@ jobs:
       #     java-version: '12.x'  
 
       # - name: Run MobSF Analysis
-      #   uses: fundacaocerti/mobsf-action@v1.7.1
+      #   uses: inm-certi/mobsf-action@v1.4
       #   env:
       #     # INPUT_FILE_NAME: android/app/build/outputs/apk/release/app-release-unsigned.apk
       #     INPUT_FILE_NAME: android/app-release-unsigned.apk
       #     SCAN_TYPE: apk
       #     OUTPUT_FILE_NAME: mobsf-report
-      #   run:
-      #     JAVA_DIRECTORY
-
-
+      
+     
+     
 
       # - name: Cleanup MobSF Permissions
       #   run: |
